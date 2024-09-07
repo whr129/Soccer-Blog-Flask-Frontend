@@ -131,7 +131,12 @@ const AddNew = () => {
     const getGroupData = async () => {
         const toDoData = await queryGroupList({pageNum: pageNumber, pageSize: 10});
         setTotalNum(toDoData.data?.totalNum);
-        setGroupList(toDoData.data?.groupList);
+        if(roleList?.includes('ALL-ADMIN')) {
+            setGroupList(toDoData.data?.groupList);
+        } else {
+            const groupsFiltered: IcurrentGroup[] = toDoData.data?.groupList.filter((item: IcurrentGroup, index: number) => roleList?.includes(`${item.code}-A`));
+            setGroupList(groupsFiltered);
+        }
     }
 
     const getGroupDetail = async (id: string) => {
